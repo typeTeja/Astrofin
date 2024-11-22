@@ -1,0 +1,23 @@
+version: '3.9'
+
+services:
+  backend:
+    ports:
+      - "9000:9000"
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://user:password@prod-db:5432/astrology_db
+    depends_on:
+      - prod-db
+
+  prod-db:
+    image: postgres:15
+    container_name: astrology_prod_db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: astrology_db
+    volumes:
+      - prod_db_data:/var/lib/postgresql/data
+
+volumes:
+  prod_db_data:
