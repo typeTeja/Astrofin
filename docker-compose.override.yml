@@ -5,7 +5,7 @@ services:
     ports:
       - "9001:9000"  # Custom dev port for backend
     volumes:
-      - ./swiss-ephemeris-api/backend:/app
+      - ./backend:/app
     environment:
       - DEBUG=True
 
@@ -13,7 +13,7 @@ services:
     ports:
       - "3002:3001"  # Custom dev port for frontend
     volumes:
-      - ./swiss-ephemeris-api/frontend:/app
+      - ./frontend:/app
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:9001/api
 

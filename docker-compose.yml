@@ -3,12 +3,12 @@ version: '3.9'
 services:
   backend:
     build:
-      context: ./swiss-ephemeris-api/backend
+      context: ./backend
       dockerfile: Dockerfile
     ports:
       - "9000:9000"
     volumes:
-      - ./swiss-ephemeris-api/backend:/app
+      - ./backend:/app
     environment:
       - DATABASE_URL=postgresql+asyncpg://user:password@db:5432/astrology_db
     depends_on:
@@ -26,12 +26,12 @@ services:
 
   frontend:
     build:
-      context: ./swiss-ephemeris-api/frontend
+      context: ./frontend
       dockerfile: Dockerfile
     ports:
       - "3001:3001"
     volumes:
-      - ./swiss-ephemeris-api/frontend:/app
+      - ./frontend:/app
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:9000/api
 
