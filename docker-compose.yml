@@ -1,18 +1,23 @@
-version: '3.8'
+version: '3.9'
 
 services:
   # Backend - FastAPI service
   backend:
     build:
       context: ./backend
+      dockerfile: Dockerfile  # Ensure this path is correct
     container_name: fastapi-backend
+    image: fastapi-backend:latest  # Tag the image properly
     ports:
       - "8000:8000"
-    volumes:
-      - ./backend:/app
     environment:
+      - PORT=8000
       - PYTHONUNBUFFERED=1
       - DATABASE_URL=postgresql://postgres:password@postgres:5432/astrology_db
+    networks:
+      - astrofin_backend
+    volumes:
+      - ./backend:/app
     depends_on:
       - postgres
 
@@ -20,16 +25,20 @@ services:
   frontend:
     build:
       context: ./frontend
+      dockerfile: Dockerfile  # Ensure this path is correct
     container_name: nextjs-frontend
+    image: nextjs-frontend:latest  # Tag the image properly
     ports:
       - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - BACKEND_API_URL=http://backend:5000
     volumes:
       - ./frontend:/app
     depends_on:
       - backend
-    environment:
-      - NODE_ENV=development
-      - BACKEND_API_URL=http://backend:8000
+    networks:
+      - astrofin_backend
 
   # PostgreSQL Database Service
   postgres:
@@ -37,12 +46,20 @@ services:
     container_name: astrology-postgres
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password  # Change this for production
+      POSTGRES_PASSWORD: password
       POSTGRES_DB: astrology_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"  # Expose PostgreSQL on port 5432
+      - "5432:5432"
+    networks:
+      - astrofin_backend
 
+# Network Configuration
+networks:
+  astrofin_backend:
+    driver: bridge
+
+# Volume Configuration
 volumes:
   postgres_data:

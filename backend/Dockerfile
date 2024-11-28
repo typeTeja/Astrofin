@@ -15,7 +15,7 @@ COPY . .
 EXPOSE 8000
 
 # Start FastAPI using Uvicorn
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "9000"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
 
 # Ephemeris Files
 COPY ./ephemeris_files /app/ephemeris_files
